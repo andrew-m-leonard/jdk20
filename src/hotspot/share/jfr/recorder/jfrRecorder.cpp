@@ -51,7 +51,9 @@
 #include "runtime/globals_extension.hpp"
 #include "utilities/growableArray.hpp"
 #ifdef ASSERT
+#if INCLUDE_JVMTI
 #include "prims/jvmtiEnvBase.hpp"
+#endif
 #endif
 
 bool JfrRecorder::is_disabled() {
@@ -266,9 +268,11 @@ bool JfrRecorder::create_components() {
   if (!create_java_event_writer()) {
     return false;
   }
+#if INCLUDE_JVMTI
   if (!create_jvmti_agent()) {
     return false;
   }
+#endif
   if (!create_post_box()) {
     return false;
   }
@@ -313,9 +317,11 @@ bool JfrRecorder::create_java_event_writer() {
   return JfrJavaEventWriter::initialize();
 }
 
+#if INCLUDE_JVMTI
 bool JfrRecorder::create_jvmti_agent() {
   return JfrOptionSet::allow_retransforms() ? JfrJvmtiAgent::create() : true;
 }
+#endif
 
 bool JfrRecorder::create_post_box() {
   assert(_post_box == NULL, "invariant");
