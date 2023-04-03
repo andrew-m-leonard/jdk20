@@ -32,8 +32,10 @@
 #include "classfile/classLoadInfo.hpp"
 #include "classfile/klassFactory.hpp"
 #include "memory/resourceArea.hpp"
+#if INCLUDE_JVMTI
 #include "prims/jvmtiEnvBase.hpp"
 #include "prims/jvmtiRedefineClasses.hpp"
+#endif
 #include "runtime/arguments.hpp"
 #include "runtime/handles.inline.hpp"
 #include "utilities/macros.hpp"
