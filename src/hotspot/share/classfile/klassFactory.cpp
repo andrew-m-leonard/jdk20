@@ -110,6 +110,7 @@ InstanceKlass* KlassFactory::check_shared_class_file_load_hook(
 }
 
 
+#if INCLUDE_JVMTI
 static ClassFileStream* check_class_file_load_hook(ClassFileStream* stream,
                                                    Symbol* name,
                                                    ClassLoaderData* loader_data,
@@ -165,6 +166,7 @@ static ClassFileStream* check_class_file_load_hook(ClassFileStream* stream,
 
   return stream;
 }
+#endif
 
 
 InstanceKlass* KlassFactory::create_from_stream(ClassFileStream* stream,
@@ -178,12 +180,13 @@ InstanceKlass* KlassFactory::create_from_stream(ClassFileStream* stream,
   ResourceMark rm(THREAD);
   HandleMark hm(THREAD);
 
-  JvmtiCachedClassFileData* cached_class_file = NULL;
-
   ClassFileStream* old_stream = stream;
 
   // increment counter
   THREAD->statistical_info().incr_define_class_count();
+
+#if INCLUDE_JVMTI
+  JvmtiCachedClassFileData* cached_class_file = NULL;
 
   // Skip this processing for VM hidden classes
   if (!cl_info.is_hidden()) {
@@ -194,6 +197,7 @@ InstanceKlass* KlassFactory::create_from_stream(ClassFileStream* stream,
                                         &cached_class_file,
                                         CHECK_NULL);
   }
+#endif
 
   ClassFileParser parser(stream,
                          name,
@@ -206,10 +210,12 @@ InstanceKlass* KlassFactory::create_from_stream(ClassFileStream* stream,
   InstanceKlass* result = parser.create_instance_klass(old_stream != stream, *cl_inst_info, CHECK_NULL);
   assert(result != NULL, "result cannot be null with no pending exception");
 
+#if INCLUDE_JVMTI
   if (cached_class_file != NULL) {
     // JVMTI: we have an InstanceKlass now, tell it about the cached bytes
     result->set_cached_class_file(cached_class_file);
   }
+#endif
 
   JFR_ONLY(ON_KLASS_CREATION(result, parser, THREAD);)
 
