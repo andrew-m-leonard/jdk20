@@ -87,7 +87,7 @@ ifneq ($(call check-jvm-feature, jvmti), true)
   JVM_EXCLUDE_FILES += jvmtiGetLoadedClasses.cpp jvmtiThreadState.cpp jvmtiExtensions.cpp \
       jvmtiImpl.cpp jvmtiManageCapabilities.cpp jvmtiRawMonitor.cpp jvmtiUtil.cpp jvmtiTrace.cpp \
       jvmtiCodeBlobEvents.cpp jvmtiEnv.cpp jvmtiRedefineClasses.cpp jvmtiEnvBase.cpp jvmtiEnvThreadState.cpp \
-      jvmtiTagMap.cpp jvmtiEventController.cpp evmCompat.cpp jvmtiEnter.xsl jvmtiExport.cpp \
+      jvmtiTagMap.cpp jvmtiEventController.cpp evmCompat.cpp jvmtiEnter.xsli jvmtiHpp.xsl jvmtiExport.cpp \
       jvmtiClassFileReconstituter.cpp jvmtiTagMapTable.cpp
 endif
 
